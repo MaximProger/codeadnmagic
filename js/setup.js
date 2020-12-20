@@ -9,6 +9,7 @@ function getRandomIntInclusive(min, max) {
 function getArrayUniqValue(array, currValue) {
   let uniqValue = array.filter((item) => item != currValue);
   let arrayValue = uniqValue[getRandomIntInclusive(0, uniqValue.length - 1)];
+  currValue = arrayValue;
   return arrayValue;
 }
 
