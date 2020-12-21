@@ -1,7 +1,7 @@
 (function () {
   // Перетаскивание окна диалога
   let setupDialogElement = document.querySelector(".setup");
-  let setupUser = setupDialogElement.querySelector(".setup-user");
+  let setupUser = setupDialogElement.querySelector(".upload");
 
   setupUser.addEventListener("mousedown", function (evt) {
     evt.preventDefault();

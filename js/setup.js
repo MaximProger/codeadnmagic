@@ -14,8 +14,6 @@
     return arrayValue;
   }
 
-  document.querySelector(".setup-similar").classList.remove("hidden");
-
   // Data
   const firstNames = [
     "Иван",
@@ -50,41 +48,6 @@
 
   const eyesColors = ["black", "red", "blue", "yellow", "green"];
 
-  let wizards = [
-    {
-      name:
-        firstNames[getRandomIntInclusive(0, firstNames.length - 1)] +
-        " " +
-        lastNames[getRandomIntInclusive(0, lastNames.length - 1)],
-      coatColor: coatColors[getRandomIntInclusive(0, coatColors.length - 1)],
-      eyesColor: eyesColors[getRandomIntInclusive(0, eyesColors.length - 1)],
-    },
-    {
-      name:
-        firstNames[getRandomIntInclusive(0, firstNames.length - 1)] +
-        " " +
-        lastNames[getRandomIntInclusive(0, lastNames.length - 1)],
-      coatColor: coatColors[getRandomIntInclusive(0, coatColors.length - 1)],
-      eyesColor: eyesColors[getRandomIntInclusive(0, eyesColors.length - 1)],
-    },
-    {
-      name:
-        firstNames[getRandomIntInclusive(0, firstNames.length - 1)] +
-        " " +
-        lastNames[getRandomIntInclusive(0, lastNames.length - 1)],
-      coatColor: coatColors[getRandomIntInclusive(0, coatColors.length - 1)],
-      eyesColor: eyesColors[getRandomIntInclusive(0, eyesColors.length - 1)],
-    },
-    {
-      name:
-        firstNames[getRandomIntInclusive(0, firstNames.length - 1)] +
-        " " +
-        lastNames[getRandomIntInclusive(0, lastNames.length - 1)],
-      coatColor: coatColors[getRandomIntInclusive(0, coatColors.length - 1)],
-      eyesColor: eyesColors[getRandomIntInclusive(0, eyesColors.length - 1)],
-    },
-  ];
-
   // Create Similar Wizards
   let setupSimilarList = document.querySelector(".setup-similar-list");
   let similarWizardTemplate = document
@@ -96,18 +59,22 @@
 
     wizardElement.querySelector(".setup-similar-label").textContent =
       wizard.name;
-    wizardElement.querySelector(".wizard-coat").style.fill = wizard.coatColor;
-    wizardElement.querySelector(".wizard-eyes").style.fill = wizard.eyesColor;
+    wizardElement.querySelector(".wizard-coat").style.fill = wizard.colorCoat;
+    wizardElement.querySelector(".wizard-eyes").style.fill = wizard.colorEyes;
 
     return wizardElement;
   }
 
-  let fragment = document.createDocumentFragment();
-  for (let i = 0; i < wizards.length; i++) {
-    fragment.appendChild(renderWizard(wizards[i]));
-  }
+  window.backend.load(function (wizards) {
+    let fragment = document.createDocumentFragment();
+    for (let i = 0; i < 4; i++) {
+      fragment.appendChild(renderWizard(wizards[i]));
+    }
 
-  setupSimilarList.appendChild(fragment);
+    setupSimilarList.appendChild(fragment);
+
+    document.querySelector(".setup-similar").classList.remove("hidden");
+  });
 
   // Setup Popup
   const setup = document.querySelector(".setup");
@@ -157,6 +124,14 @@
     if (evt.keyCode == 13 && !setup.classList.contains("hidden")) {
       setupWizardForm.submit();
     }
+  });
+
+  setupWizardForm.addEventListener("submit", function (evt) {
+    evt.preventDefault();
+
+    window.backend.save(new FormData(setupWizardForm), function (response) {
+      setup.classList.add("hidden");
+    });
   });
 
   // Switch colors
